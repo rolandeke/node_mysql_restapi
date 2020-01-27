@@ -47,4 +47,9 @@ router.post("/", async (req, res) => {
   }
 });
 
+//ROute for deleting a comment from the database
+router.delete("/:id", (req, res) => {
+  console.log(req.params.id);
+});
+
 module.exports = router;

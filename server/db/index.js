@@ -52,5 +52,14 @@ commentsdb.add = ({ username, comment }) => {
 };
 
 //This function is for deleting a comment from the database
-commentsdb.delete = id => {};
+commentsdb.delete = id => {
+  return new Promise((resolve, reject) => {
+    const sql = "DELETE FROM comments WHERE id = ?;";
+    connPool.query(sql, [id], (err, result) => {
+      if (err) return reject(err);
+
+      return resolve(result);
+    });
+  });
+};
 module.exports = commentsdb;
