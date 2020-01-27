@@ -48,8 +48,56 @@ router.post("/", async (req, res) => {
 });
 
 //ROute for deleting a comment from the database
-router.delete("/:id", (req, res) => {
-  console.log(req.params.id);
+router.delete("/:id", async (req, res) => {
+  try {
+    if (isNaN(req.params.id)) {
+      res.json({ msg: `Invalid Comment ID: ${req.params.id}` });
+      return;
+    }
+    if (req.params.id < 0) {
+      res.json({ msg: `Invalid Comment ID: ${req.params.id}` });
+    } else {
+      const comment = await commentsdb.one(parseInt(req.params.id));
+      if (comment) {
+        const deletedUser = await commentsdb.delete(parseInt(req.params.id));
+        res.json({ msg: "Successfully Deleted Comment" });
+      } else {
+        res.json({
+          msg: `Comment with the ID: ${req.params.id} does not exist.`
+        });
+      }
+    }
+  } catch (e) {
+    res.json(e);
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  if (isNaN(req.params.id) || req.params.id <= 0) {
+    res.json({ msg: `Invalid Comment id: ${req.params.id}` });
+    return;
+  }
+  const commentExist = await commentsdb.one(parseInt(req.params.id));
+  if (commentExist) {
+    const { username, comment } = req.body;
+    if (username == "" || comment == "") {
+      res.json({ msg: "Invalid Input Fields" });
+      return;
+    } else {
+      const com = {
+        username: username,
+        comment: comment
+      };
+
+      const updateComment = await commentsdb.update(
+        com,
+        parseInt(req.params.id)
+      );
+      res.json({ msg: "Comment successfully updated" });
+    }
+  } else {
+    res.json({ msg: `Comment with the ID: ${req.params.id} does not exits` });
+  }
 });
 
 module.exports = router;

@@ -9,6 +9,8 @@ app.use("/api/comments", apiRouter);
 
 app.use("/api/users", usersRouter);
 
-app.listen(process.env.PORT || "5000", () => {
-  console.log(`App started on ${process.env.PORT || 5000}`);
+const PORT = 3000;
+
+app.listen(PORT, err => {
+  console.log(`App started on ${PORT}`);
 });

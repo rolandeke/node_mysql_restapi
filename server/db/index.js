@@ -62,4 +62,16 @@ commentsdb.delete = id => {
     });
   });
 };
+
+//This function is for updating a comment in the database
+commentsdb.update = ({ username, comment }, id) => {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE comments set username = ?, comment = ? where id = ?;";
+    connPool.query(sql, [username, comment, id], (err, result) => {
+      if (err) return reject(err);
+
+      return resolve(result);
+    });
+  });
+};
 module.exports = commentsdb;
