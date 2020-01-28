@@ -59,7 +59,7 @@ router.delete("/:id", async (req, res) => {
     } else {
       const comment = await commentsdb.one(parseInt(req.params.id));
       if (comment) {
-        const deletedUser = await commentsdb.delete(parseInt(req.params.id));
+        const deletedComment = await commentsdb.delete(parseInt(req.params.id));
         res.json({ msg: "Successfully Deleted Comment" });
       } else {
         res.json({

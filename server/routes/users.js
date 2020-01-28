@@ -77,5 +77,30 @@ router.post("/", async (req, res) => {
     res.json({ msg: e });
   }
 });
+
+//Route for deleting a user from the database
+router.delete("/:id", async (req, res) => {
+  try {
+    if (isNaN(req.params.id)) {
+      res.json({ msg: `Invalid Comment ID: ${req.params.id}` });
+      return;
+    }
+    if (req.params.id < 0) {
+      res.json({ msg: `Invalid Comment ID: ${req.params.id}` });
+    } else {
+      const user = await usersdb.one(parseInt(req.params.id));
+      if (user) {
+        const deletedUser = await usersdb.delete(parseInt(req.params.id));
+        res.json({ msg: "Successfully Deleted User" });
+      } else {
+        res.json({
+          msg: `User with the ID: ${req.params.id} does not exist.`
+        });
+      }
+    }
+  } catch (e) {
+    res.json(e);
+  }
+});
 //Exporting Route
 module.exports = router;
