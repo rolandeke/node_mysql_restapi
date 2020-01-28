@@ -48,7 +48,6 @@ router.get("/:name", async (req, res, next) => {
 });
 
 //Route for posting a user to the database
-
 router.post("/", async (req, res) => {
   try {
     const { firstname, lastname, age } = req.body;

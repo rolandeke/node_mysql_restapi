@@ -58,4 +58,18 @@ usersdb.add = ({ firstname, lastname, age }) => {
   });
 };
 
+//Function for deleteing a user from the database
+
+usersdb.delete = id => {
+  {
+  }
+  return new Promise((resolve, reject) => {
+    const sql = `DELETE FROM ajaxphp.users WHERE id = ${id}`;
+    connPool.query(sql, (err, result) => {
+      if (err) return reject(err);
+
+      return resolve(result);
+    });
+  });
+};
 module.exports = usersdb;
