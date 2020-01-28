@@ -37,7 +37,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 //Route for getting Users by name
-router.get("/name/:name", async (req, res, next) => {
+router.get("/:name", async (req, res, next) => {
   try {
     let result = await usersdb.onebyname(req.params.name);
     res.json(result);
@@ -47,5 +47,36 @@ router.get("/name/:name", async (req, res, next) => {
   }
 });
 
+//Route for posting a user to the database
+
+router.post("/", async (req, res) => {
+  try {
+    const { firstname, lastname, age } = req.body;
+    if (
+      firstname == "" ||
+      lastname == "" ||
+      isNaN(age) ||
+      age == "" ||
+      age <= 0
+    ) {
+      res.json({
+        err:
+          "Please Check your inputs before submitting. All fields are required"
+      });
+      return;
+    }
+    const newUser = {
+      firstname: firstname,
+      lastname: lastname,
+      age: age
+    };
+    const insertedUser = await usersdb.add(newUser);
+    res.json({
+      msg: `User has been successfully inserted. UserID: ${insertedUser.insertId}`
+    });
+  } catch (e) {
+    res.json({ msg: e });
+  }
+});
 //Exporting Route
 module.exports = router;
